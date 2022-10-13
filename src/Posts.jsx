@@ -1,11 +1,11 @@
 import PostAttribute from "./PostAttribute";
 import { Button, Container } from "react-bootstrap";
 
-const Posts = (props) => {
+const Posts = ({ title, postText, likes, showButtons, increaseLikes, decreaseLikes }) => {
   const post = {
-    title: props.title,
-    postText: props.postText,
-    likes: props.likes,
+    title: title,
+    postText: postText,
+    likes: likes,
   };
 
   const attributes = [
@@ -28,14 +28,16 @@ const Posts = (props) => {
         <PostAttribute label={att.label} value={post[att.name]} />
       ))}
       <br />
-      <div>
-        <Button onClick={() => props.increaseLikes()} className="likeButton">
-          Like
-        </Button>
-        <Button onClick={() => props.decreaseLikes()} className="likeButton">
-          DisLike
-        </Button>
-      </div>
+      {showButtons && (
+        <div>
+          <Button onClick={() => increaseLikes()} className="likeButton">
+            Like
+          </Button>
+          <Button onClick={() => decreaseLikes()} className="likeButton">
+            DisLike
+          </Button>
+        </div>
+      )}
     </Container>
   );
 };

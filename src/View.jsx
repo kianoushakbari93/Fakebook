@@ -1,11 +1,12 @@
 import Posts from "./Posts";
 
-const View = ({ postbox, increaseLikes, decreaseLikes }) => {
+const View = ({ postbox, increaseLikes, decreaseLikes, showButtons }) => {
   return (
     <>
       {postbox.map((posts, i) => (
         <Posts
           key={i}
+          showButtons={showButtons}
           title={posts.title}
           postText={posts.postText}
           likes={posts.likes}

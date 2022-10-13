@@ -86,6 +86,7 @@ function App() {
           element={
             <View
               postbox={postbox}
+              showButtons={false}
               increaseLikes={(id) => increaseLikes(id)}
               decreaseLikes={(id) => decreaseLikes(id)}
             />
@@ -96,6 +97,7 @@ function App() {
           element={
             <View
               postbox={postbox}
+              showButtons={true}
               increaseLikes={(id) => increaseLikes(id)}
               decreaseLikes={(id) => decreaseLikes(id)}
             />
