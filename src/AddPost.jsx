@@ -1,6 +1,8 @@
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import { useState } from "react";
+import toastr from "toastr";
+import "toastr/build/toastr.min.css";
 
 const AddPost = (props) => {
   const [formValues, changeFormValues] = useState({
@@ -16,7 +18,8 @@ const AddPost = (props) => {
   };
   const submitHandler = (event) => {
     event.preventDefault();
-    props.onSubmit(formValues.title, formValues.postText)
+    props.onSubmit(formValues.title, formValues.postText);
+    toastr["success"]("Post added", "Success");
     changeFormValues({
       title:"",
       postText:"",
