@@ -1,7 +1,17 @@
+import { Link } from "react-router-dom";
 import PostAttribute from "./PostAttribute";
 import { Button, Container } from "react-bootstrap";
 
-const Posts = ({ title, postText, likes, showButtons, increaseLikes, decreaseLikes }) => {
+const Posts = ({
+  title,
+  postText,
+  likes,
+  postId,
+  showButtons,
+  increaseLikes,
+  decreaseLikes,
+  deletePost,
+}) => {
   const post = {
     title: title,
     postText: postText,
@@ -22,23 +32,30 @@ const Posts = ({ title, postText, likes, showButtons, increaseLikes, decreaseLik
       label: "Likes: ",
     },
   ];
+
   return (
     <Container className="person">
-      {attributes.map((att) => (
-        <PostAttribute label={att.label} value={post[att.name]} />
-      ))}
+      <Link className="nav-link" to={`/view/${postId}`}>
+        {attributes.map((att) => (
+          <PostAttribute label={att.label} value={post[att.name]} />
+        ))}
+      </Link>
       <br />
       {showButtons && (
-        <div>
+        <div className="buttonDiv">
           <Button onClick={() => increaseLikes()} className="likeButton">
             Like
           </Button>
           <Button onClick={() => decreaseLikes()} className="likeButton">
             DisLike
           </Button>
+          <Button onClick={() => deletePost()} className="likeButton">
+            Delete
+          </Button>
         </div>
       )}
     </Container>
   );
 };
+
 export default Posts;

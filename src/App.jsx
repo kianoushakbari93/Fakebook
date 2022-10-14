@@ -2,18 +2,11 @@ import { useEffect, useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Container } from "react-bootstrap";
 import "./App.css";
-import Posts from "./Posts";
+import PostGetter from "./PostGetter";
 import AddPost from "./AddPost";
 import { Routes, Route, Link } from "react-router-dom";
 import { Navbar, Nav } from "react-bootstrap";
 import View from "./View";
-
-// useState([
-//   { title: "dogs", postText: "are lovely", likes: 0, id: 0 },
-//   { title: "cats", postText: "are lovely", likes: 0, id: 1 },
-//   { title: "seahorse", postText: "are lovely", likes: 0, id: 2 },
-//   { title: "mouse", postText: "are lovely", likes: 0, id: 3 },
-// ]);
 
 function App() {
   //defining our array of object that we want to put text inside
@@ -46,7 +39,7 @@ function App() {
 
   const updatePostBox = (title, postText) => {
     const item = { id: postbox.length, title, postText, likes: 0 };
-    localStorage.setItem("posts", JSON.stringify(...postbox, item));
+    localStorage.setItem("posts", JSON.stringify([...postbox, item]));
     changePostBox((state) => [...state, item]);
   };
 
@@ -54,10 +47,22 @@ function App() {
     const listContents = localStorage.getItem("posts");
     changePostBox(JSON.parse(listContents) || []);
   }, []);
+
   const clearLocal = () => {
     localStorage.clear();
     postbox = [];
     changePostBox();
+  };
+
+  const deletePost = (id) => {
+    const updatedPosts = postbox.filter((post) => {
+      if (post.id !== id) {
+        return true;
+      }
+      return false;
+    });
+    localStorage.setItem("posts", JSON.stringify(updatedPosts));
+    changePostBox(updatedPosts);
   };
   return (
     <Container>
@@ -76,7 +81,9 @@ function App() {
             <Link className="nav-link" to="/AddPost">
               Add Post
             </Link>
-            <Link  className="nav-link" onClick={clearLocal}>Clear</Link>
+            <Link className="nav-link" onClick={clearLocal}>
+              Clear
+            </Link>
           </Nav>
         </Navbar.Collapse>
       </Navbar>
@@ -89,20 +96,35 @@ function App() {
               showButtons={false}
               increaseLikes={(id) => increaseLikes(id)}
               decreaseLikes={(id) => decreaseLikes(id)}
+              deletePost={(id) => deletePost(id)}
             />
           }
         />
-        <Route
-          path="/View"
-          element={
-            <View
-              postbox={postbox}
-              showButtons={true}
-              increaseLikes={(id) => increaseLikes(id)}
-              decreaseLikes={(id) => decreaseLikes(id)}
-            />
-          }
-        />
+        <Route path="/view">
+          <Route
+            path="/view/:postId"
+            element={
+              <PostGetter
+                postbox={postbox}
+                increaseLikes={(id) => increaseLikes(id)}
+                decreaseLikes={(id) => decreaseLikes(id)}
+                deletePost={(id) => deletePost(id)}
+              />
+            }
+          />
+          <Route
+            index
+            element={
+              <View
+                postbox={postbox}
+                showButtons={true}
+                increaseLikes={(id) => increaseLikes(id)}
+                decreaseLikes={(id) => decreaseLikes(id)}
+                deletePost={(id) => deletePost(id)}
+              />
+            }
+          />
+        </Route>
         <Route
           path="/AddPost"
           element={
